@@ -15,6 +15,13 @@ local api = vim.api
 
 local M = {}
 
+local config = {
+  ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
+  ignore_buftype = { "quickfix", "nofile", "help" },
+  open_folds = true,
+  dont_center = false,
+}
+
 local function set_cursor_position()
   -- Return if we have a buffer or filetype we want to ignore
   for _, k in pairs(config["ignore_buftype"]) do
@@ -67,13 +74,6 @@ local function set_cursor_position()
     api.nvim_input("zvzz")
   end
 end
-
-local config = {
-  ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
-  ignore_buftype = { "quickfix", "nofile", "help" },
-  open_folds = true,
-  dont_center = false,
-}
 
 function M.setup(options)
   if options["ignore_filetype"] then
