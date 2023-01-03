@@ -15,32 +15,7 @@ local api = vim.api
 
 local M = {}
 
-local config = {
-  ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
-  ignore_buftype = { "quickfix", "nofile", "help" },
-  open_folds = true,
-  dont_center = false,
-}
-
-function M.setup(options)
-  if options["ignore_filetype"] then
-    config["ignore_filetype"] = options["ignore_filetype"]
-  end
-
-  if options["ignore_buftype"] then
-    config["ignore_buftype"] = options["ignore_buftype"]
-  end
-
-  if options["open_folds"] then
-    config["open_folds"] = options["open_folds"]
-  end
-
-  if options["dont_center"] then
-    config["dont_center"] = options["dont_center"]
-  end
-end
-
-function set_cursor_position()
+local function set_cursor_position()
   -- Return if we have a buffer or filetype we want to ignore
   for _, k in pairs(config["ignore_buftype"]) do
     if bo.buftype == k then
@@ -83,7 +58,7 @@ function set_cursor_position()
       -- of the file. If we did "zz" half the screen would be blank.
     else
       api.nvim_win_set_cursor(0, cursor_position)
-      api.nvim_input("<c-e>")
+      -- api.nvim_input("<c-e>")
     end
   end
 
@@ -93,10 +68,32 @@ function set_cursor_position()
   end
 end
 
-api.nvim_create_autocmd({ "BufWinEnter" }, {
-  callback = function()
-    set_cursor_position()
-  end,
-})
+local config = {
+  ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
+  ignore_buftype = { "quickfix", "nofile", "help" },
+  open_folds = true,
+  dont_center = false,
+}
+
+function M.setup(options)
+  if options["ignore_filetype"] then
+    config["ignore_filetype"] = options["ignore_filetype"]
+  end
+
+  if options["ignore_buftype"] then
+    config["ignore_buftype"] = options["ignore_buftype"]
+  end
+
+  if options["open_folds"] then
+    config["open_folds"] = options["open_folds"]
+  end
+
+  if options["dont_center"] then
+    config["dont_center"] = options["dont_center"]
+  end
+  
+  local augroup = api.nvim_create_augroup("remember.nvim")
+  api.nvim_create_autocmd("BufWinEnter", { group = augroup, callback = set_cursor_position })
+end
 
 return M
