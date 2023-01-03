@@ -92,7 +92,7 @@ function M.setup(options)
     config["dont_center"] = options["dont_center"]
   end
   
-  local augroup = api.nvim_create_augroup("remember.nvim")
+  local augroup = api.nvim_create_augroup("remember.nvim", {})
   api.nvim_create_autocmd("BufWinEnter", { group = augroup, callback = set_cursor_position })
 end
 
