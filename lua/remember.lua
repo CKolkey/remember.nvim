@@ -58,14 +58,14 @@ local function set_cursor_position()
       -- the screen
     elseif api.nvim_buf_line_count(0) - row > ((fn.line("w$") - fn.line("w0")) / 2) - 1 then
       api.nvim_win_set_cursor(0, cursor_position)
-      api.nvim_input("zz")
+      vim.cmd("normal! zz")
 
       -- If we're at the end of the screen, set the cursor position and move
       -- the window up by one with C-e. This is to show that we are at the end
       -- of the file. If we did "zz" half the screen would be blank.
     else
       api.nvim_win_set_cursor(0, cursor_position)
-      -- api.nvim_input("<c-e>")
+      vim.cmd("normal! <c-e>")
     end
   end
 
